@@ -32,7 +32,8 @@ document.getElementById('inputfile').addEventListener('change', function () {
 
 function nextChapter() {
     document.getElementById('content').innerHTML = '';
-    for (var line = chapters[chapterNo]; line < chapters[chapterNo+1]; line++) {
+    document.getElementById('content').innerHTML += `<p style="text-align:center">` + fileContentArray[chapters[chapterNo]] + `</p>`;
+    for (var line = chapters[chapterNo]+1; line < chapters[chapterNo+1]; line++) {
         document.getElementById('content').innerHTML += `<p>` + fileContentArray[line] + `</p>`;
     }
     chapterNo += 1;
