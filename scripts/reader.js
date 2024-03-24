@@ -9,14 +9,43 @@ document.getElementById('inputfile').addEventListener('change', function () {
         //document.getElementById('content').textContent = fileContentArray.length;
         // get all the chapters
         var i = 0;
+        // real chapter number
+        var no = 0;
         for (var line = 0; line < fileContentArray.length - 1; line++) {
-            index1 = fileContentArray[line].indexOf('第');
-            index2 = fileContentArray[line].indexOf('章');
-            if ((index1!= -1) && (index2!= -1) && (index1 < index2)) {
+            // check repeat chapter
+            var subString1 = '第' + toChinese(no) + '章';
+            var index1 = fileContentArray[line].indexOf(subString1);
+            // check next chapter
+            var subString2 = '第' + toChinese(no+1) + '章';
+            var index2 = fileContentArray[line].indexOf(subString2);
+            // check next next chapter
+            var subString3 = '第' + toChinese(no+2) + '章';
+            var index3 = fileContentArray[line].indexOf(subString3);
+            // allow repeat, missing 1 chapter
+            if (index2 != -1) {
+              chapters[i] = line;
+              document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
+              no++;
+              i++;
+            } else if (index1 != -1) {
+              chapters[i] = line;
+              document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
+              i++;
+            } else if (index3 != -1) {
+              chapters[i] = line;
+              document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
+              no += 2;
+              i++;              
+            } else {
+              // do nothing
+            }
+            // restrict check, chapters alwasy right
+            /*if (index2 != -1) {
                 chapters[i] = line;
                 document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
                 i++;
-            }
+                no++;
+            }*/
         }
         //document.getElementById('content').innerHTML += `<p>` + chapters.length + `</p>`;        
 
@@ -53,3 +82,75 @@ function jumpChapter(id) {
     // scroll to top
     window.scrollTo(0, 0);
 }
+
+// From https://github.com/ouxingzhi/toChinese
+  var toChinese = function() {
+    var UnitMap = {
+        0 : '零',
+        1 : '一',
+        2 : '二',
+        3 : '三',
+        4 : '四',
+        5 : '五',
+        6 : '六',
+        7 : '七',
+        8 : '八',
+        9 : '九'
+    },
+    BigUnitMap = {
+        10 : '十',
+        100 : '百',
+        1000 : '千'
+    };
+    function getUnit(num) {
+        var n = num.toString().split('');
+        var units = function(n) {
+            var ns = [];
+            for (var i = 0,
+            I = n.length; i < I; i++) {
+                ns.push({
+                    Unit: n[i],
+                    BigUnit: ('1' + Array(I - i).join('0'))
+                })
+            }
+            return ns
+        } (n);
+        var str = "",
+        last;
+        for (var i = 0,
+        I = units.length; i < I; i++) {
+            if (last != '0' || units[i].Unit != '0') {
+                str +=
+                function() {
+                    var list = n.slice(i).join('');
+                    if (i != 0 && list.match(/^0+$/i)) return '';
+                    if (i == 0 && units[i].BigUnit == '10' && units[i].Unit == '1') return '';
+                    return UnitMap[units[i].Unit]
+                } () + (units[i].Unit != '0' && typeof BigUnitMap[units[i].BigUnit] != 'undefined' ? BigUnitMap[units[i].BigUnit] : '');
+                last = units[i].Unit
+            }
+        }
+        return str
+    };
+    return function(num) {
+        num = num || 0;
+        var str = num.toString().split('').reverse().join(''),
+        reg = /(\d{1,4})(\d{1,4})?(\d{1,4})?(\d{1,4})?/i,
+        ex = reg.exec(str);
+        var qian, wang, yi;
+        if (ex[1]) qian = ex[1].split('').reverse().join('');
+        if (ex[2]) wang = ex[2].split('').reverse().join('');
+        if (ex[3]) yi = ex[3].split('').reverse().join('');
+        var result = '';
+        if (yi && yi.match(/[^0]/i)) {
+            result = result + getUnit(yi) + '亿'
+        }
+        if (wang && wang.match(/[^0]/i)) {
+            result = result + getUnit(wang) + '万'
+        }
+        if (!qian || !result || !qian.match(/^0+$/i)) {
+            result = result + getUnit(qian)
+        }
+        return result
+    }
+} ();
