@@ -10,7 +10,9 @@ document.getElementById('inputfile').addEventListener('change', function () {
         // get all the chapters
         var i = 0;
         for (var line = 0; line < fileContentArray.length - 1; line++) {
-            if ((fileContentArray[line].indexOf('章') != -1) && (fileContentArray[line].indexOf('第') != -1)) {
+            index1 = fileContentArray[line].indexOf('第');
+            index2 = fileContentArray[line].indexOf('章');
+            if ((index1!= -1) && (index2!= -1) && (index1 < index2)) {
                 chapters[i] = line;
                 document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
                 i++;
