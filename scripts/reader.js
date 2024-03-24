@@ -12,7 +12,7 @@ document.getElementById('inputfile').addEventListener('change', function () {
         for (var line = 0; line < fileContentArray.length - 1; line++) {
             if ((fileContentArray[line].indexOf('章') != -1) && (fileContentArray[line].indexOf('第') != -1)) {
                 chapters[i] = line;
-                document.getElementById('content').innerHTML += `<p>` + fileContentArray[line] + `</p>`;
+                document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
                 i++;
             }
         }
@@ -37,6 +37,17 @@ function nextChapter() {
         document.getElementById('content').innerHTML += `<p>` + fileContentArray[line] + `</p>`;
     }
     chapterNo += 1;
+    // scroll to top
+    window.scrollTo(0, 0);
+}
+
+function jumpChapter(id) {
+    document.getElementById('content').innerHTML = '';
+    document.getElementById('content').innerHTML += `<p style="text-align:center">` + fileContentArray[chapters[id]] + `</p>`;
+    for (var line = chapters[id]+1; line < chapters[Number(id)+1]; line++) {
+        document.getElementById('content').innerHTML += `<p>` + fileContentArray[line] + `</p>`;
+    }
+    chapterNo = Number(id)+1;
     // scroll to top
     window.scrollTo(0, 0);
 }
