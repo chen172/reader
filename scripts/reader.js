@@ -83,6 +83,13 @@ function jumpChapter(id) {
     window.scrollTo(0, 0);
 }
 
+function catalog() {
+    document.getElementById('content').innerHTML = '';
+    for (var i = 0; i < chapters.length; i++)
+        document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[chapters[i]]+'</button>'+'<br>';
+    window.scrollTo(0, 0);
+}
+
 // From https://github.com/ouxingzhi/toChinese
   var toChinese = function() {
     var UnitMap = {
