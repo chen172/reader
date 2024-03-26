@@ -48,7 +48,13 @@ document.getElementById('inputfile').addEventListener('change', function () {
             }*/
         }
         // last line, end of the book
-        chapters[i] = fileContentArray.length;
+        var maxParagraphys = 200
+        if ((fileContentArray.length-chapters[i-1]) > maxParagraphys) {
+            // Too may paragraphys
+            chapters[i] = chapters[i-1] + maxParagraphys;
+        } else {
+            chapters[i] = fileContentArray.length;
+        }
         //document.getElementById('content').innerHTML += `<p>` + chapters.length + `</p>`;        
 
         // first chapter
