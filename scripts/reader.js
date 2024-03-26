@@ -47,6 +47,8 @@ document.getElementById('inputfile').addEventListener('change', function () {
                 no++;
             }*/
         }
+        // last line, end of the book
+        chapters[i] = fileContentArray.length;
         //document.getElementById('content').innerHTML += `<p>` + chapters.length + `</p>`;        
 
         // first chapter
@@ -62,6 +64,9 @@ document.getElementById('inputfile').addEventListener('change', function () {
 })
 
 function preChapter() {
+    // No previous chapter anymore
+    if (chapterNo == 1)
+        return;
     document.getElementById('content').innerHTML = '';
     // chapter name
     document.getElementById('content').innerHTML += `<p style="text-align:center">` + fileContentArray[chapters[chapterNo-2]] + `</p>`;
@@ -74,6 +79,9 @@ function preChapter() {
 }
 
 function nextChapter() {
+    // No next chapter anymore
+    if (chapterNo == (chapters.length-1))
+        return;
     document.getElementById('content').innerHTML = '';
     // chapter name
     document.getElementById('content').innerHTML += `<p style="text-align:center">` + fileContentArray[chapters[chapterNo]] + `</p>`;
@@ -98,7 +106,7 @@ function jumpChapter(id) {
 
 function catalog() {
     document.getElementById('content').innerHTML = '';
-    for (var i = 0; i < chapters.length; i++)
+    for (var i = 0; i < (chapters.length-1); i++)
         document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[chapters[i]]+'</button>'+'<br>';
     window.scrollTo(0, 0);
 }
