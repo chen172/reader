@@ -7,6 +7,8 @@ document.getElementById('inputfile').addEventListener('change', function () {
         fileContentArray = reader.result.split(/\r\n|\n/);
         //document.getElementById('content').textContent = reader.result;
         //document.getElementById('content').textContent = fileContentArray.length;
+        document.getElementById('content').innerHTML = '';
+        chapters.length = 0;
         // get all the chapters
         var i = 0;
         // real chapter number
