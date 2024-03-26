@@ -61,8 +61,21 @@ document.getElementById('inputfile').addEventListener('change', function () {
     //reader.readAsText(this.files[0]);
 })
 
+function preChapter() {
+    document.getElementById('content').innerHTML = '';
+    // chapter name
+    document.getElementById('content').innerHTML += `<p style="text-align:center">` + fileContentArray[chapters[chapterNo-2]] + `</p>`;
+    for (var line = chapters[chapterNo-2]+1; line < chapters[chapterNo-1]; line++) {
+        document.getElementById('content').innerHTML += `<p>` + fileContentArray[line] + `</p>`;
+    }
+    chapterNo -= 1;
+    // scroll to top
+    window.scrollTo(0, 0);
+}
+
 function nextChapter() {
     document.getElementById('content').innerHTML = '';
+    // chapter name
     document.getElementById('content').innerHTML += `<p style="text-align:center">` + fileContentArray[chapters[chapterNo]] + `</p>`;
     for (var line = chapters[chapterNo]+1; line < chapters[chapterNo+1]; line++) {
         document.getElementById('content').innerHTML += `<p>` + fileContentArray[line] + `</p>`;
