@@ -48,7 +48,7 @@ document.getElementById('inputfile').addEventListener('change', function () {
             }*/
         }
         // last line, end of the book
-        var maxParagraphys = 200
+        var maxParagraphys = 1000
         if ((fileContentArray.length-chapters[i-1]) > maxParagraphys) {
             // Too may paragraphys
             chapters[i] = chapters[i-1] + maxParagraphys;
