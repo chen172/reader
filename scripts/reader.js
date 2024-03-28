@@ -1,3 +1,8 @@
+/*var maxVolume = 10;
+var chapters = new Array(maxVolume);
+for (var i = 0; i < chapters.length; i++) {
+    chapters[i] = new Array();
+}*/
 var chapters = new Array();
 var fileContentArray;
 var chapterNo = 0;
@@ -9,45 +14,67 @@ document.getElementById('inputfile').addEventListener('change', function () {
         //document.getElementById('content').textContent = fileContentArray.length;
         document.getElementById('content').innerHTML = '';
         chapters.length = 0;
-        // get all the chapters
-        var i = 0;
-        // real chapter number
-        var no = 0;
+
+        // get all the volumes
+        var volumes = new Array();
+        var volumeNo = 0;
         for (var line = 0; line < fileContentArray.length - 1; line++) {
-            // check repeat chapter
-            var subString1 = '第' + toChinese(no) + '章';
-            var index1 = fileContentArray[line].indexOf(subString1);
-            // check next chapter
-            var subString2 = '第' + toChinese(no+1) + '章';
-            var index2 = fileContentArray[line].indexOf(subString2);
-            // check next next chapter
-            var subString3 = '第' + toChinese(no+2) + '章';
-            var index3 = fileContentArray[line].indexOf(subString3);
-            // allow repeat, missing 1 chapter
-            if (index2 != -1) {
-              chapters[i] = line;
-              document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
-              no++;
-              i++;
-            } else if (index1 != -1) {
-              chapters[i] = line;
-              document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
-              i++;
-            } else if (index3 != -1) {
-              chapters[i] = line;
-              document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
-              no += 2;
-              i++;              
-            } else {
-              // do nothing
+            var subString1 = '第' + toChinese(volumeNo+1) + '卷';
+            var subString2 = '第一章';
+            // restrict check
+            if (fileContentArray[line].indexOf(subString1) != -1) {
+                if ((fileContentArray[line].indexOf(subString2) != -1) || (fileContentArray[line+1].indexOf(subString2) != -1)) {
+                volumes[volumeNo] = line;
+                //document.getElementById('content').innerHTML += '<button'+' id='+volumeNo+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
+                volumeNo++;
+                }
             }
-            // restrict check, chapters alwasy right
-            /*if (index2 != -1) {
-                chapters[i] = line;
-                document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
-                i++;
-                no++;
-            }*/
+        }
+        // No volume
+        if (volumeNo == 0) {
+            volumes[volumeNo] = 0;
+            volumeNo++;
+        }
+        // last line, end of the book
+        volumes[volumeNo] = fileContentArray.length - 1;
+
+        // get all the chapters from the book
+        var i = 0;
+        for (var j = 0; j < volumeNo; j++) {
+            // volume name
+            //document.getElementById('content').innerHTML += '<p>'+fileContentArray[volumes[j]]+'</p>';
+            // real chapter number
+            var no = 0;
+            // get all the chapters from the volume
+            for (var line = volumes[j]; line < volumes[j+1]; line++) {
+                // check repeat chapter
+                var subString1 = '第' + toChinese(no) + '章';
+                var index1 = fileContentArray[line].indexOf(subString1);
+                // check next chapter
+                var subString2 = '第' + toChinese(no+1) + '章';
+                var index2 = fileContentArray[line].indexOf(subString2);
+                // check next next chapter
+                var subString3 = '第' + toChinese(no+2) + '章';
+                var index3 = fileContentArray[line].indexOf(subString3);
+                // allow repeat, missing 1 chapter
+                if (index2 != -1) {
+                    chapters[i] = line;
+                    document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
+                    no++;
+                    i++;
+                } else if (index1 != -1) {
+                    chapters[i] = line;
+                    document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
+                    i++;
+                } else if (index3 != -1) {
+                    chapters[i] = line;
+                    document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
+                    no += 2;
+                    i++;              
+                } else {
+                // do nothing
+                }
+            }
         }
         // last line, end of the book
         var maxParagraphys = 1000
