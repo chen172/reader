@@ -152,6 +152,16 @@ function catalog() {
     window.scrollTo(0, 0);
 }
 
+function pageRead() {
+    var i = 0;
+    var page = 50;
+    for (var line = 0; line < fileContentArray.length - 1; line += page) {
+        chapters[i] = line;
+        i++;
+    }
+    nextChapter();
+}
+
 // From https://github.com/ouxingzhi/toChinese
   var toChinese = function() {
     var UnitMap = {
