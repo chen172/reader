@@ -49,24 +49,30 @@ document.getElementById('inputfile').addEventListener('change', function () {
             for (var line = volumes[j]; line < volumes[j+1]; line++) {
                 // check repeat chapter
                 var subString1 = '第' + toChinese(no) + '章';
+                var subString11 = no + '章';
                 var index1 = fileContentArray[line].indexOf(subString1);
+                var index11 = fileContentArray[line].indexOf(subString11);
                 // check next chapter
                 var subString2 = '第' + toChinese(no+1) + '章';
+                var subString22 = (no+1) + '章';
                 var index2 = fileContentArray[line].indexOf(subString2);
+                var index22 = fileContentArray[line].indexOf(subString22);
                 // check next next chapter
                 var subString3 = '第' + toChinese(no+2) + '章';
+                var subString33 = (no+2) + '章';
                 var index3 = fileContentArray[line].indexOf(subString3);
+                var index33 = fileContentArray[line].indexOf(subString33);
                 // allow repeat, missing 1 chapter
-                if (index2 != -1) {
+                if ((index2 != -1) || (index22 != -1)) {
                     chapters[i] = line;
                     document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
                     no++;
                     i++;
-                } else if (index1 != -1) {
+                } else if ((index1 != -1) || (index11 != -1)) {
                     chapters[i] = line;
                     document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
                     i++;
-                } else if (index3 != -1) {
+                } else if ((index3 != -1) || (index33 != -1)) {
                     chapters[i] = line;
                     document.getElementById('content').innerHTML += '<button'+' id='+i+' onclick="jumpChapter(this.id)">'+fileContentArray[line]+'</button>'+'<br>';
                     no += 2;
