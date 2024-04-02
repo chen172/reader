@@ -99,9 +99,12 @@ document.getElementById('inputfile').addEventListener('change', function () {
         chapterNo += 1;*/        
     }
 
-    reader.readAsText(this.files[0], "GBK");
-    // default encoding: UTF-8
-    //reader.readAsText(this.files[0]);
+    languageEncoding(this.files[0]).then((fileInfo) => {
+        if(fileInfo.encoding == "UTF-8")
+            reader.readAsText(this.files[0]);
+        else
+            reader.readAsText(this.files[0], "GBK");
+    });
 })
 
 function preChapter() {
